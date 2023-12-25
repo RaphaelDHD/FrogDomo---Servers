@@ -1,9 +1,63 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
-const app = express();
+const UserModel = {
+    username: String,
+	email: String,
+	password: String,
+}
+
+const User = new mongoose.model("User", UserModel)
+
 const PORT = 3000;
+const app = express()
+
+mongoose
+	.connect(`mongodb://localhost:${PORT}/FrogDomoDB`, { useNewUrlParser: true })
+	.then(() => {
+		
+        
+
+		
+	})
 
 app.use(express.json());
+
+app.post('/register', (req, res) => {
+    const newUser = new User({
+        username: req.body.username,
+        email : req.body.email,
+        password: req.body.password
+    })
+
+    newUser.save()
+    .then(() => {
+        res.status(200).send(`Welcome ${newUser.username} !`)
+    })
+})
+
+app.post('/login', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    User.findOne( {username: username} )
+    .then(foundUser => {
+        if (foundUser) {
+            if (foundUser.password === password)
+            {
+                res.status(200).send(`Hello ${foundUser.password}`)
+            }
+            else {
+                res.status(401).send("Wrong password")
+            } 
+        }
+        else {
+            res.status(404).send("No user found")
+        } 
+    })
+})
+
+
 
 
 // Objects
@@ -29,6 +83,11 @@ const temperature = {
 const portal = {
     degree: 0.0
 }
+
+const alarm = {
+    active : false,
+    triggered : false
+} 
 
 
 // GET
@@ -108,3 +167,7 @@ app.listen(PORT, () => {
     console.log("Listen");
 });
 
+
+app.listen(PORT, () => {
+    console.log("Server has started!")
+})
