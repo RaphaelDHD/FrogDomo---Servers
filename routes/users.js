@@ -39,14 +39,45 @@ router.post('/', async (req, res) => {
         email: req.body.email,
         password: req.body.password
     })
-    try {
-        const newUser = await user.save()
-        res.status(200).send(newUser) 
+
+    const existingUser = await User.findOne( {email: user.email} )
+    
+    if (existingUser)
+    {
+        res.status(401).send(`User with email ${existingUser.email} already exists !`)
     }
-    catch (error) {
-        res.status(400).json(error.message)
+    else {
+        try {
+            const newUser = await user.save()
+            res.status(200).send(newUser) 
+        }
+        catch (error) {
+            res.status(400).json(error.message)
+        }
     }
 })
+
+
+router.post('/login', async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const foundUser = await User.findOne( {email: email} )
+
+    if (foundUser) {
+        if (foundUser.password === password)
+        {
+            res.status(200).send(`Hello ${foundUser.password}`)
+        }
+        else {
+            res.status(401).send("Wrong password")
+        } 
+    }
+    else {
+        res.status(404).send("No user found")
+    } 
+})
+
 
 // Changer les paramètres DEVICE
 router.put('/:userId', async (req, res) => {
