@@ -9,6 +9,11 @@ db.once('open', () => console.log('Connected to Database'))
 
 app.use(express.json())
 
+// Default route
+app.get('/', (req, res) => {
+    res.status(200).send("Bienvenue sur l'API FrogDomo !")
+})
+
 const usersRouter = require('./routes/users')
 app.use('/users', usersRouter)
 
