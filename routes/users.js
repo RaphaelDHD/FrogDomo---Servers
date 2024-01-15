@@ -67,7 +67,7 @@ router.post('/login', async (req, res) => {
     if (foundUser) {
         if (foundUser.password === password)
         {
-            res.status(200).send(`Hello ${foundUser.password}`)
+            res.status(200).send(foundUser._id.toString())
         }
         else {
             res.status(401).send("Wrong password")
@@ -100,6 +100,28 @@ router.put('/:userId', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+});
+
+router.put('/:userId/alarm', async (req, res) => {
+   const { userId } = req.params;
+   
+    try {
+        const alarmValue = req.body.alarm;
+
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            alarm: alarmValue
+        }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        res.status(200).json(updatedUser);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+
 });
 
 // Changer la couleur d'une lampe en particulier
