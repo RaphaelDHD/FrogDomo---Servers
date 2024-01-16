@@ -57,6 +57,10 @@ const userSchema = new mongoose.Schema({
             type: Boolean,
             default: false
         },
+        rung: {
+            type: Boolean,
+            default: false,
+        },
         date: {
             type: Date
         } 
