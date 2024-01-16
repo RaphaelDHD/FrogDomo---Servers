@@ -1,11 +1,5 @@
 const mongoose = require("mongoose");
 
-const LIGHT_BULB_NUMBER = 6;
-
-const lightBulbSchema = new mongoose.Schema({
-    
-});
-
 const userSchema = new mongoose.Schema({
     // User
     username: {
