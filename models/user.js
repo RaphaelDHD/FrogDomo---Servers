@@ -3,14 +3,7 @@ const mongoose = require("mongoose");
 const LIGHT_BULB_NUMBER = 6;
 
 const lightBulbSchema = new mongoose.Schema({
-    active: {
-        type: Boolean,
-        default: false
-    },
-    color: {
-        type: String,
-        default: "#E7F024"
-    }
+    
 });
 
 const userSchema = new mongoose.Schema({
@@ -29,12 +22,15 @@ const userSchema = new mongoose.Schema({
     },
 
     // Devices
-    light_bulbs: {
-        type: [lightBulbSchema],
-        default: Array.from({ length: LIGHT_BULB_NUMBER }, () => ({
-            active: false,
-            color: "#E7F024"
-        }))
+    light_bulb: {
+        active: {
+            type: Boolean,
+            default: false
+        },
+        color: {
+            type: String,
+            default: "#E7F024"
+        }
     },
 
     fan : {
